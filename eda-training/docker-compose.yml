@@ -1,0 +1,45 @@
+version: '3.8'
+# add shared configuration
+x-shared-config: &shared-config
+  tty: true
+  expose:
+    - ${PORT_NB}
+  ports:
+    - ${PORT_NB}:${PORT_NB}
+  build:
+    context: docker
+    dockerfile: dockerfile
+    args:
+      TF_TAG:
+      WORKSPACE_DIR:
+  # user: "${USER_IDS}"
+  working_dir: ${WORKSPACE_DIR}
+  volumes:
+    - ./:${WORKSPACE_DIR}
+    - ../tensorflow_datasets:/tensorflow_datasets
+
+services:
+  eda-training-cpu:
+    profiles:
+      - "cpu"
+    container_name: tensorflow-cpu
+    hostname: tensorflow-cpu
+    image: ai2ys/mlzoomcamp-capstone-1/eda-training:0.0.0-cpu
+    <<: *shared-config
+
+  eda-training-gpu:
+    profiles:
+      - "gpu"
+    container_name: tensorflow-gpu
+    hostname: tensorflow-gpu
+    image: ai2ys/mlzoomcamp-capstone-1/eda-training:0.0.0-gpu
+    <<: *shared-config
+    # this section is required for the GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            # specify a single or mutliple GPU indices or UUIDs here
+            device_ids: ['${GPU_ID}']
+            capabilities: [gpu]

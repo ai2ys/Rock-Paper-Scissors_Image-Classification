@@ -1,0 +1,2 @@
+tensorflow-datasets==4.9.3
+tensorflow-addons==0.21.0

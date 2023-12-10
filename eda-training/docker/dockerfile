@@ -1,0 +1,37 @@
+ARG TF_TAG=2.15.0-gpu-jupyter
+FROM tensorflow/tensorflow:${TF_TAG}
+LABEL maintainer="https://github.com/ai2ys"
+
+# Setting bash as default shell
+ENV SHELL=/bin/bash
+ARG DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /
+# # add path because of pip warning
+# ARG ROOT_LOCAL_DIR=/root/.local
+# RUN mkdir -p ${ROOT_LOCAL_DIR} && chmod a+rwx ${ROOT_LOCAL_DIR}
+# ENV PATH=${PATH}:${ROOT_LOCAL_DIR}/bin/
+
+# Install packages/tools
+RUN apt-get update && apt-get install -y \
+    apt-utils \
+    vim \
+    htop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip
+RUN python3 -m pip install --upgrade --no-cache-dir pip==23.3.1
+# Install python tools
+RUN pip3 install --no-cache-dir \
+    jupyterlab==4.0.9 \
+    nvitop==1.3.1
+
+# Install python requirements
+COPY requirements.txt /tmp/
+RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
+
+ARG WORKSPACE_DIR
+WORKDIR ${WORKSPACE_DIR}
+
+ENV PORT_NB=8888
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --notebook-dir=${WORKSPACE_DIR} --ip=0.0.0.0 --port=${PORT_NB} --no-browser --allow-root"]
