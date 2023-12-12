@@ -1,2 +1,11 @@
 tensorflow_datasets/downloads/
 tensorflow_datasets/rock_paper_scissors/
+*.pyc
+final_model/
+eda-training/final_model.tf/saved_model.pb
+
+.gitignore
+
+.gitignore
+eda-training/final_model.tf/
+*/.ipynb_checkpoints/

@@ -23,18 +23,29 @@ There is a file [`.env`](.env) in the directory of `eda-training`, which you hav
     ```.env	
     DC_PROFILE=<"cpu" or "gpu">
     ```
+1. **`GPU_ID`** - Set its value to the GPU number you want to use for training, if you have multiple NVIDIA GPUs on your system. The value `0` is the default value and will use GPU 0.
+
+    ```.env	
+    GPU_ID=<GPU number>
+    ```
+
+1. **`PORT_NB`** - Change the port for JupyterLab, if requried.
 
 ## Building the Docker image and running the Docker container
 
-After adapting the [`.env`](.env) file, you can build the Docker image and run the Docker container. The [`docker-compose.yml`](docker-compose.yml) file contains two profiles, one for `cpu` and one for `gpu`. You can choose the profile by setting the environment variable `DC_PROFILE` to `cpu` or `gpu` before running the commands below. 
+After adapting the [`.env`](.env) file, you can build the Docker image and run the Docker container. The [`docker-compose.yml`](docker-compose.yml) file contains two profiles, one for `cpu` and one for `gpu`. You can choose the profile by setting the environment variable `DC_PROFILE` to `cpu` or `gpu` before running the commands below.
 
 1. Build the Docker image using `Docker Compose`
     ```bash
+    # run "source .env" to make variables known in terminal
+    source .env
     docker compose --profile $DC_PROFILE build
     ```
 
 1. Run the Docker container using `Docker Compose`
     ```bash
+    # if not the same terminal as previously run "source .env" again
+    source .env
     docker compose --profile $DC_PROFILE up
     ```
     This will start Jupyter Lab in the container and open it in your browser. The terminal will show the URL to open in your browser, which will look like this:
@@ -61,6 +72,7 @@ After adapting the [`.env`](.env) file, you can build the Docker image and run t
     ```
 1. Removing the container after stopping it using `Ctrl+C`
     ```bash
+    source .env
     docker compose --profile $DC_PROFILE down
     ```
 
