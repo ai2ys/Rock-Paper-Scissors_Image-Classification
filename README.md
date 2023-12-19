@@ -15,7 +15,7 @@
         1. [Installing `kubectl` and `kind` on Linux](#installing-kubectl-and-kind-on-linux)
         1. [Creating a Kubernetes cluster using `kind` and `kubectl`](#creating-a-kubernetes-cluster-using-kind-and-kubectl)
         1. [Trouble Shooting using Docker rootless mode](#trouble-shooting-using-docker-rootless-mode)
-
+1. [MLZoomCamp Capstone Project 1 General Information](#mlzoomcamp-capstone-project-1-general-information)
 
 
 ## General information
@@ -236,7 +236,10 @@ After that it was possible to create the cluster using `kind create cluster` .
 
 
 
+## MLZoomCamp Capstone Project 1 General Information
+General information about he MLZoomCamp Midterm Project can be found here: https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/master/projects#capstone-1
 
+Information for cohort 2023 can be found here: https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/master/cohorts/2023/projects.md#capstone-1
 
 
 
