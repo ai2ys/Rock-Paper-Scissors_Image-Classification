@@ -1,0 +1,5 @@
+# ignore all
+*
+# but not
+!gateway-requirements.txt
+

@@ -1,6 +1,7 @@
 version: '3.8'
 # add shared configuration
 x-shared-config: &shared-config
+  image: ${IMAGE_NAME}
   tty: true
   expose:
     - ${PORT_NB}
@@ -14,35 +15,34 @@ x-shared-config: &shared-config
       WORKSPACE_DIR:
   environment:
     PORT_NB:
-  # user: "${USER_IDS}"
+    WORKSPACE_DIR:
   working_dir: ${WORKSPACE_DIR}
   volumes:
     - ./:${WORKSPACE_DIR}
     - ../tensorflow_datasets:/tensorflow_datasets
-    - ../lib:/workspace/lib
+    - ../lib:${WORKSPACE_DIR}/lib
 
 services:
+  # service using no GPU
   eda-training-cpu:
     profiles:
       - "cpu"
     container_name: tensorflow-cpu
     hostname: tensorflow-cpu
-    image: ai2ys/mlzoomcamp-capstone-1/eda-training:0.0.0-cpu
     <<: *shared-config
 
+  # service using GPU
   eda-training-gpu:
     profiles:
       - "gpu"
     container_name: tensorflow-gpu
     hostname: tensorflow-gpu
-    image: ai2ys/mlzoomcamp-capstone-1/eda-training:0.0.0-gpu
     <<: *shared-config
-    # this section is required for the GPU support
+    # this section is required for GPU support
     deploy:
       resources:
         reservations:
           devices:
           - driver: nvidia
-            # specify a single or mutliple GPU indices or UUIDs here
             device_ids: ['${GPU_ID}']
             capabilities: [gpu]

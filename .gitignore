@@ -9,3 +9,5 @@ eda-training/final_model.tf/saved_model.pb
 .gitignore
 eda-training/final_model.tf/
 */.ipynb_checkpoints/
+
+eda-training/models/

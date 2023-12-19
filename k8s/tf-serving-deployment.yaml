@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-serving
+  labels:
+    app: tf-serving
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-serving
+  template:
+    metadata:
+      labels:
+        app: tf-serving
+    spec:
+      containers:
+      - name: tf-serving
+        image: ai2ys/mlzoomcamp-capstone-1:tf-serving-0.0.0
+        ports:
+        - containerPort: 8501

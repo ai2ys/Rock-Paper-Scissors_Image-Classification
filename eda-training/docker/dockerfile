@@ -1,4 +1,4 @@
-ARG TF_TAG=2.15.0-gpu-jupyter
+ARG TF_TAG=2.14.0-gpu-jupyter
 FROM tensorflow/tensorflow:${TF_TAG}
 LABEL maintainer="https://github.com/ai2ys"
 
@@ -30,8 +30,8 @@ RUN pip3 install --no-cache-dir \
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
-ARG WORKSPACE_DIR
+ENV WORKSPACE_DIR=/workspace
 WORKDIR ${WORKSPACE_DIR}
 
 ENV PORT_NB=8888
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --notebook-dir=${WORKSPACE_DIR} --ip=0.0.0.0 --port=${PORT_NB} --no-browser --allow-root"]
+CMD ["bash", "-c", "jupyter lab --notebook-dir=${WORKSPACE_DIR} --ip=0.0.0.0 --port=${PORT_NB} --no-browser --allow-root"]

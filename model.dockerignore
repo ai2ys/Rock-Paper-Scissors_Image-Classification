@@ -1,0 +1,4 @@
+# ignore all
+*
+# but not
+!models/rock_paper_scissors-saved_model

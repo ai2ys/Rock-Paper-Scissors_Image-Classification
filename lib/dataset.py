@@ -29,7 +29,7 @@ class Dataset():
 
         # Define the new training and validation splits
         train_split = f'train[:{num_train_samples - num_val_samples}]'
-        val_split = f'train[-{num_val_samples}:]'
+        val_split = f'train[{num_train_samples - num_val_samples}:]'
 
         # Load the datasets
         (self.ds_train, self.ds_val, self.ds_test), self.ds_info = tfds.load(
@@ -40,7 +40,36 @@ class Dataset():
             with_info=True,
             read_config=self.read_config,
         )
-        # print(ds_info)
+        
+
+    # def load_cv(self, num_folds=5):
+    #     # Calculate the size of each fold
+    #     num_train_samples = self.ds_info.splits['train'].num_examples
+    #     fold_size = num_train_samples // num_folds
+
+    #     # Initialize lists to store the datasets
+    #     self.ds_train_folds = []
+    #     self.ds_val_folds = []
+
+    #     # Create the splits for training and validation datasets
+    #     for i in range(num_folds):
+    #         # Define the splits
+    #         val_split = f'train[{i * fold_size}:{(i + 1) * fold_size}]'
+    #         train_split = f'train[:{i * fold_size}]+train[{(i + 1) * fold_size}:]'
+
+    #         # Load the datasets
+    #         ds_train, ds_val = tfds.load(
+    #             self.dataset_name,
+    #             split=[train_split, val_split],
+    #             shuffle_files=True,
+    #             as_supervised=True,
+    #             with_info=False,
+    #             read_config=self.read_config,
+    #         )
+
+    #         # Store the datasets
+    #         self.ds_train_folds.append(ds_train)
+    #         self.ds_val_folds.append(ds_val)
 
     def get_ds_train(self):
         return self.ds_train

@@ -1,0 +1,38 @@
+services:
+  tf-serving:
+    image: ai2ys/mlzoomcamp-capstone-1:tf-serving-0.0.0
+    container_name: tf-serving
+    build:
+      context: .
+      dockerfile: model.dockerfile
+    ports:
+      - "8501:8501"
+
+  gateway:
+    image: ai2ys/mlzoomcamp-capstone-1:gateway-0.0.0
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: gateway.dockerfile
+    ports:
+      - "9696:9696"
+    depends_on:
+      - tf-serving
+
+  test:
+    container_name: test
+    hostname: test
+    image: ai2ys/mlzoomcamp-capstone-1:test-model-0.0.0
+    depends_on:
+      - tf-serving
+    profiles:
+      - "test"
+    environment:
+      IP_GATEWAY: "gateway"
+    build:
+      context: .
+      dockerfile: test-model.dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
+    tty: true
