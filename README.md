@@ -2,15 +2,23 @@
 
 **Table of contents**
 
-- [Image Classification - Rock Paper Scissors Game](#image-classification---rock-paper-scissors-game)
-  - [Introduction](#introduction)
-  - [EDA and Model Training](#eda-and-model-training)
-    - [Environment setup using Docker container](#environment-setup-using-docker-container)
-    - [Deployment](#deployment)
-      - [Model Serving - Docker Compose](#model-serving---docker-compose)
-      - [Model Serving - Kubernetes](#model-serving---kubernetes)
+1. [General information](#general-information)
+1. [EDA and Model Training](#eda-and-model-training)
+    1. [Environment setup using Docker container](#environment-setup-using-docker-container)
+    1. [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
+    1. [Model Training](#model-training)
+        1. [Training - Jupyter Notebook 📓](#training---jupyter-notebook)
+        1. [Training - Python Script 🐍](#training---python-script)
+1. [Deployment](#deployment)
+    1. [Model Serving - Docker Compose](#model-serving---docker-compose)
+    1. [Model Serving - Kubernetes](#model-serving---kubernetes)
+        1. [Installing `kubectl` and `kind` on Linux](#installing-kubectl-and-kind-on-linux)
+        1. [Creating a Kubernetes cluster using `kind` and `kubectl`](#creating-a-kubernetes-cluster-using-kind-and-kubectl)
+        1. [Trouble Shooting using Docker rootless mode](#trouble-shooting-using-docker-rootless-mode)
 
 
+
+## General information
 
 **General information  on the game**
 
@@ -195,7 +203,7 @@ https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries
     kind delete cluster --name mlzoomcamp-capstone-1
     ```
 
-##### Trouble Shooting using Docker rootless mode
+#### Trouble Shooting using Docker rootless mode
 
 When creating the cluster using `kind` I got the following error message:
 
@@ -204,7 +212,7 @@ Due to the system setup this resulted in
 ```bash
 ERROR: failed to create cluster: running kind with rootless provider requires cgroup v2, see https://kind.sigs.k8s.io/docs/user/rootless/
 ```
-Followed the following intructions to fix this issue: https://kind.sigs.k8s.io/docs/user/rootless/
+Followed the following instructions to fix this issue: https://kind.sigs.k8s.io/docs/user/rootless/
 
 1. > [...] adding `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1"` to `/etc/default/grub` and running `sudo update-grub` to enable cgroup v2 [...]
 

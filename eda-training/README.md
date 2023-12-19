@@ -12,15 +12,21 @@
     1. [Training - Python Script 🐍](#training---python-script)
 
 
-
-
-
 ## Pre-requisites
 
-All of the following code assumes working on `Linux` or `WSL2`. Prerequisites are `Docker` and `Docker Compose` (usually is already installed when installing `Docker`).
+All of the following code assumes working on `Linux`. Prerequisites are `Docker` and `Docker Compose`, where `Docker Compose` is usually already installed with the latest Docker versions.
 
+```bash
+# using docker version
+$ docker --version
+Docker version 24.0.7, build afdd53b
 
+# using docker compose version
+$ docker compose version
+Docker Compose version v2.21.0
+```
 
+The system has a NVIDIA GPU installed which was used for training the models.
 
 ## Environment Setup
 
@@ -55,17 +61,17 @@ After adapting the [`.env`](.env) file, you can build the Docker image and run t
 
 `Docker Compose` is used as it makes the building process and starting the container easier. For example does the tag name not to have defined explicitly, as it already defined in the [`docker-compose.yml`](docker-compose.yml) file or in the companion environment file [`.env`](.env).
 
-1. In the terminal change to the directory of this README file.
+**Important:** In the terminal change to the directory of this README file. Exec
 
-    ```bash
-    cd eda-training
-    ```
+```bash
+cd eda-training
+```
 
 1. Build the Docker image using `Docker Compose`
     ```bash
     # run "source .env" to make variables known in terminal
     source .env 
-    docker compose build
+    docker compose build eda-training-$DC_PROFILE
     ```
 
 1. Run the Docker container using `Docker Compose`
