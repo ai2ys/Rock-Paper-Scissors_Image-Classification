@@ -89,8 +89,6 @@ class Processing():
             image = self.zoom_layer(image)
         return image, label
 
-
-
     def revert_normalize_0_1_to_uint8(self, image, label):
         # convert back to original value range
         image = image * 255.0
