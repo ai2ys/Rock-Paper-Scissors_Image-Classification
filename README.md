@@ -152,6 +152,8 @@ docker compose push
 
 For deploying the model (pods) and the gateway (services) to a `Kubernetes` cluster we are going to use the tool `kind` (Kubernetes in Docker) to create a `Kubernetes` cluster locally.
 
+This step assumes that the `Docker` images have already been built locally or pulled from Docker Hub, see section [Model Serving - Docker Compose](#model-serving---docker-compose).
+
 #### Installing `kubectl` and `kind` on Linux
 
 Installing `kubectl` and `kind` on Linux (AMD64 / x86_64).
