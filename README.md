@@ -3,6 +3,9 @@
 **Table of contents**
 
 1. [General information](#general-information)
+    1. [General information on the game](#general-information-on-the-game)
+    1. [Goal of this project](#goal-of-this-project)
+    1. [Dataset](#dataset)
 1. [EDA and Model Training](#eda-and-model-training)
     1. [Environment setup using Docker container](#environment-setup-using-docker-container)
     1. [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
@@ -20,16 +23,38 @@
 
 ## General information
 
-**General information  on the game**
+This repository contains the code for the MLZoomCamp Capstone Project 1.
+
+### General information on the game
 
 🎲 [ Game 'rock paper scissors' described on Wikipedia](https://en.wikipedia.org/wiki/Rock_paper_scissors)
 
-**Goal of this project** 
+### Goal of this project
 
 The goal of this project is to automatically classify images of hands showing gestures of the game "Rock Paper Scissors" as 'rock', 'paper', or 'scissors' gesture.
 
+The model training is done using the `TensorFlow` Machine Learning framework. 
 
-**Dataset**
+The trained model will then get deployed using `Kubernetes` (locally using `kind`).
+
+In `Kubernetes` the model will be served as a pod using `TensorFlow Serving` (`RESTful API`) and using a gateway service (`REST` API using `Flask`).
+
+- Kubernetes
+    - https://kubernetes.io/
+    
+- kind
+    - https://kubernetes.io/docs/tasks/tools/#kind
+     
+- TensorFlow Serving
+    - https://www.tensorflow.org/tfx/guide/serving
+
+- Flask
+    - https://flask.palletsprojects.com/en/3.0.x/
+
+The model was trained and deployed using a `Linux` system with a `NVIDIA` GPU installed.  EDA and training were executed in Docker containers. The system has Docker (rootless mode) installed. Therefore, some adaptions had to be made to be able to use `kind`, see section [Trouble Shooting using Docker rootless mode](#trouble-shooting-using-docker-rootless-mode).
+
+
+### Dataset
 
 The dataset used in this project is available in the **TensorFlow datasets catalog**. 
 
@@ -72,7 +97,7 @@ Please refer to the notebook [./eda-training/README.md](./eda-training/README.md
 
 ## Deployment
 
-We are going to use TensorFlow Serving using its restful API to deploy the model.
+We are going to use `TensorFlow Serving` using its `RESTful API` to deploy the model.
 
 Following Docker images will be used for deployment:
 
@@ -83,13 +108,23 @@ Following Docker images will be used for deployment:
 
 ### Model Serving - Docker Compose
 
-For testing the both locally a `Docker Compose` file [`docker-compose.yml`](docker-compose.yml) is used. An additional services `test` is defined in the `docker-compose.yml` file which is used for testing the model and the gateway locally.
+Prior to the deployment to a Kubernetes cluster we are going to test the model and the gateway locally using `Docker Compose`. Therefore, we are going to use the `Docker Compose` file [`docker-compose.yml`](docker-compose.yml) which defines the services `tf-serving` and `gateway`.
+Additionally, a service `test` is defined which is used for testing the model and the gateway locally.
+
+The docker images are built using `docker compose` and pushed to Docker Hub. Therefore, the build step could be omitted. Directly running the `docker compose up` (using the `--profile test`) command below will pull all the images from Docker Hub.
+
+Docker images are provided on Docker Hub:
+
+- https://hub.docker.com/repository/docker/ai2ys/mlzoomcamp-capstone-1
+    - `ai2ys/mlzoomcamp-capstone-1:test-model-0.0.0`
+    - `ai2ys/mlzoomcamp-capstone-1:tf-serving-0.0.0`
+    - ` ai2ys/mlzoomcamp-capstone-1:gateway-0.0.0`
 
 Open a terminal and make sure to be in the directory of this README file and run the following commands to test the serving and gateway locally using `Docker Compose`.
 
 ```bash
-# build the Docker image
-docker compose build
+# [optional] build the Docker image, pre-built images are provided on Docker Hub
+docker compose --profile test build 
 # start the services (containers) using the 'test' profile
 docker compose --profile test up -d 
 # test tf-serving
@@ -100,7 +135,7 @@ docker exec -it test python test-gateway.py
 docker compose --profile test down
 ```
 
-After knowing that the model and the gateway are working locally we can deploy the model and the gateway to a Kubernetes cluster.
+After knowing that the model and the gateway are working locally we can deploy the model and the gateway to a `Kubernetes` cluster.
 
 Before doing that we are going to push the Docker images to a Docker registry.
 
@@ -112,12 +147,10 @@ docker login
 # push the images to Docker Hub
 docker compose push
 ```
-Images are provided on Docker Hub: https://hub.docker.com/r/ai2ys/mlzoomcamp-capstone-1/tags
-
 
 ### Model Serving - Kubernetes
 
-For deploying the model and the gateway to a Kubernetes cluster we are going to use `kind` (Kubernetes in Docker) to create a Kubernetes cluster locally.
+For deploying the model (pods) and the gateway (services) to a `Kubernetes` cluster we are going to use the tool `kind` (Kubernetes in Docker) to create a `Kubernetes` cluster locally.
 
 #### Installing `kubectl` and `kind` on Linux
 
@@ -156,7 +189,7 @@ https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries
 
 #### Creating a Kubernetes cluster using `kind` and `kubectl`
 
-🎞️ **Video recording of the following steps**: 🔗 https://youtu.be/AefPENIT-jA
+🎞️ **Video recording of performing the following steps**: 🔗 https://youtu.be/AefPENIT-jA
 
 1. Create a Kubernetes cluster using `kind` and `kubectl`:
 

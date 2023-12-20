@@ -67,12 +67,13 @@ After adapting the [`.env`](.env) file, you can build the Docker image and run t
 cd eda-training
 ```
 
-1. Build the Docker image using `Docker Compose`
+1. [Optional]  Build the Docker image using `Docker Compose`
     ```bash
     # run "source .env" to make variables known in terminal
     source .env 
     docker compose build eda-training-$DC_PROFILE
     ```
+    Pre-built image available on Docker Hub [https://hub.docker.com/repository/docker/ai2ys/mlzoomcamp-capstone-1](https://hub.docker.com/repository/docker/ai2ys/mlzoomcamp-capstone-1) image tag `ai2ys/mlzoomcamp-capstone-1:eda-training-0.0.0`. This step can therefore be skipped. Running the next step will automatically pull the image from Docker Hub if it is not available locally.
 
 1. Run the Docker container using `Docker Compose`
     ```bash
