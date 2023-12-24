@@ -240,34 +240,60 @@ https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries
 
 #### Trouble Shooting using Docker rootless mode
 
-When creating the cluster using `kind` I got the following error message:
+When creating the cluster using `kind` I got the following error message, because of the system setup with Docker rootless mode:
 
-```bash
-Due to the system setup this resulted in 
 ```bash
 ERROR: failed to create cluster: running kind with rootless provider requires cgroup v2, see https://kind.sigs.k8s.io/docs/user/rootless/
 ```
-Followed the following instructions to fix this issue: https://kind.sigs.k8s.io/docs/user/rootless/
+
+Following the instructions provided in the link of the error message to fix this issue: https://kind.sigs.k8s.io/docs/user/rootless/
+
+Steps accomplished:
 
 1. > [...] adding `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1"` to `/etc/default/grub` and running `sudo update-grub` to enable cgroup v2 [...]
+    1. Created a backup of `/etc/default/grub`
+        ```bash
+        sudo cp /etc/default/grub /etc/default/grub.bak
+        ```
+    
+    1. Added `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1"` to `/etc/default/grub`
+        ```bash
+        sudo vim /etc/default/grub
+        # add mentioned content to file
+        ```
 
 1. Rebooting the system 
+    ```bash
+    sudo reboot now
+    ```
 
 1. Create `/etc/systemd/system/user@.service.d/delegate.conf` with the following content, and then run `sudo systemctl daemon-reload`:
-```text
-[Service]
-Delegate=yes
-```
+    ```text
+    [Service]
+    Delegate=yes
+    ```
 
-```bash
-sudo mkdir -p /etc/systemd/system/user@.service.d
-sudo vim /etc/systemd/system/user@.service.d/delegate.conf
-# add mentioned content to file
-sudo systemctl daemon-reload
-systemctl --user restart docker
-```
+    1. Creating the file and adding the content:
+        ```bash
+        # create directory
+        sudo mkdir -p /etc/systemd/system/user@.service.d
+        # (create and) edit file
+        sudo vim /etc/systemd/system/user@.service.d/delegate.conf
+        ```
 
-After that it was possible to create the cluster using `kind create cluster` .
+        - Adding the following lines to the file
+            ```text
+            [Service]
+            Delegate=yes
+            ```
+    
+    1. Running the following command to reload the daemon:
+        ```bash
+        sudo systemctl daemon-reload
+        systemctl --user restart docker
+        ```
+
+After that it was possible to create the cluster using `kind create cluster` with Docker rootless mode.
 
 
 
@@ -275,10 +301,5 @@ After that it was possible to create the cluster using `kind create cluster` .
 General information about he MLZoomCamp Midterm Project can be found here: https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/master/projects#capstone-1
 
 Information for cohort 2023 can be found here: https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/master/cohorts/2023/projects.md#capstone-1
-
-
-
-
-
 
 
